@@ -23,7 +23,7 @@ properties([
                     classpath: [],
                     sandbox: false,
                     script: 
-                        'if (Environment == "dev") { return ["One","Two:selected"] } else { return ["2","T23:selected"]}'
+                        'if (ENV == "dev") { return ["One","Two:selected"] } else { return ["2","T23:selected"]}'
                 ]
             ]
         ]
