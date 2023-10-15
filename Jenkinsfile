@@ -14,11 +14,11 @@ properties([
             name: 'CHOICES',
             script: [
                 $class: 'GroovyScript',
-                fallbackScript: [
-                    classpath: [],
-                    sandbox: false,
-                    script: 'return ["Check Jenkins ScriptApproval page"]'
-                ],
+                //fallbackScript: [
+                //    classpath: [],
+                //    sandbox: false,
+                //    script: 'return ["Check Jenkins ScriptApproval page"]'
+                //],
                 script: [
                     classpath: [],
                     sandbox: false,
