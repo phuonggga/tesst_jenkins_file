@@ -25,7 +25,7 @@ properties([
         [$class: 'CascadeChoiceParameter', 
             choiceType: 'PT_SINGLE_SELECT', 
             description: 'Select the AMI from the Dropdown List',
-            name: 'AMI List', 
+            name: 'AMI_List', 
             referencedParameters: 'Env', 
             script: 
                 [$class: 'GroovyScript', 
@@ -54,7 +54,7 @@ properties([
         [$class: 'DynamicReferenceParameter', 
             choiceType: 'ET_ORDERED_LIST', 
             description: 'Select the  AMI based on the following infomration', 
-            name: 'Image Information', 
+            name: 'Image_Information', 
             referencedParameters: 'Env', 
             script: 
                 [$class: 'GroovyScript', 
@@ -84,8 +84,8 @@ pipeline {
                 steps {
                     script {
                         echo "Environment: ${params.Env}"
-                        echo "AMIL: ${parms.AMI List}"
-                        echo "AMIL: ${parms.Image Information}"
+                        echo "AMIL: ${parms.AMI_List}"
+                        echo "demo: ${parms.Image_Information}"
                 }
             }
         }
