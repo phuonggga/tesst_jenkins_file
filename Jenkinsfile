@@ -83,7 +83,9 @@ pipeline {
             stage('Parameters'){
                 steps {
                     script {
-
+                        echo "Environment: ${params.Env}"
+                        echo "AMIL: ${parms.AMI List}"
+                        echo "AMIL: ${parms.Image Information}"
                 }
             }
         }
