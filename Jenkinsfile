@@ -1,25 +1,33 @@
-def call(int buildNumber) {
-  if (buildNumber % 2 == 0) {
-    pipeline {
-      agent any
-      stages {
-        stage('Even Stage') {
-          steps {
-            echo "The build number is even"
-          }
+def jobParameters = [:]
+jobParameters['INSTANCE_NAME'] = params.INSTANCE_NAME
+jobParameters['WORKSPACE'] = params.WORKSPACE
+def paramsObjects = []
+jobParameters.each {
+  key, value ->
+    paramsObjects.push([$class: 'StringParameterValue', name: key, value: value])
+}    
+[
+    [$class:StringParameterValue, name:param1, value:value1],
+    [$class:StringParameterValue, name:param2, value:value2]
+]
+pipeline{
+    stages {
+        stage('Test1')
+        steps {
+            script {
+                echo 'Starting "test1"'
+                build job: './test1'
+                parameters:
+                paramsObjects
+            }
         }
-      }
-    }
-  } else {
-    pipeline {
-      agent any
-      stages {
-        stage('Odd Stage') {
-          steps {
-            echo "The build number is odd"
-          }
+        stage('Test2')
+        steps {
+            script {
+                echo 'Starting "test2"'
+                build job: './test2',
+                        parameters: paramsObjects
+            }
         }
-      }
     }
-  }
 }
