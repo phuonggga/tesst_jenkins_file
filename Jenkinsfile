@@ -1,49 +1,43 @@
-properties([ 
+properties([
     parameters([
-        [
-            $class: 'ChoiceParameter', 
-            choiceType: 'PT_SINGLE_SELECT', 
-            description: 'Select a choice', 
-            filterLength: 1, 
-            filterable: true, 
-            name: 'choice1', 
-            randomName: 'choice-parameter-7601235200970', 
-            script: [
-                $class: 'GroovyScript', 
-                fallbackScript: [
-                    classpath: [], 
-                    sandbox: false, 
-                    script: 'return ["ERROR"]'
-                ], 
-                script: [
-                    classpath: [], 
-                    sandbox: false, 
-                    script: 'return[\'aaa\',\'bbb\']'
-                ]
+        choice(
+            name: 'ENV',
+            choices: [
+                'dev',
+                'prod'
             ]
-        ], 
-        [
-            $class: 'CascadeChoiceParameter', 
-            choiceType: 'PT_SINGLE_SELECT', 
-            description: 'Active Choices Reactive parameter', 
-            filterLength: 1, 
-            filterable: true, 
-            name: 'choice2', 
-            randomName: 'choice-parameter-7601237141171', 
-            referencedParameters: 'choice1', 
+        ),
+        [$class: 'ChoiceParameter',
+            choiceType: 'PT_RADIO',
+            filterLength: 1,
+            filterable: false,
+            name: 'CHOICES',
             script: [
-                $class: 'GroovyScript', 
+                $class: 'GroovyScript',
                 fallbackScript: [
-                    classpath: [], 
-                    sandbox: false, 
-                    script: 'return ["error"]'
-                ], 
+                    classpath: [],
+                    sandbox: false,
+                    script: 'return ["Check Jenkins ScriptApproval page"]'
+                ],
                 script: [
-                    classpath: [], 
-                    sandbox: false, 
-                    script: 'if(choice1.equals("aaa")){return [\'a\', \'b\']} else {return [\'aaaaaa\',\'fffffff\']}'
+                    classpath: [],
+                    sandbox: false,
+                    script: 'return ["One","Two:selected"]'
                 ]
             ]
         ]
     ])
 ])
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Print the Values') {
+            steps {
+                echo "Environment: ${params.ENV}"
+                echo "Choice: ${params.CHOICES}"
+            }
+        }
+    }
+}
