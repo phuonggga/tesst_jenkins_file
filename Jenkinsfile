@@ -14,15 +14,18 @@ properties([
             name: 'CHOICES',
             script: [
                 $class: 'GroovyScript',
-                //fallbackScript: [
-                //    classpath: [],
-                //    sandbox: false,
-                //    script: 'return ["Check Jenkins ScriptApproval page"]'
-                //],
+                fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script: 'return ["Check Jenkins ScriptApproval page"]'
+                ],
                 script: [
                     classpath: [],
                     sandbox: false,
-                    script: 'return ["One","Two:selected"]'
+                    script: '
+                        if (Environment == "dev") { return ["One","Two:selected"] }
+                        else { return ["2","T23:selected"] }
+                    '
                 ]
             ]
         ]
