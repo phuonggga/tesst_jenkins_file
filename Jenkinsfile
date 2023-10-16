@@ -74,7 +74,7 @@ properties([
 pipeline {
     agent any
         stages {
-            stage('Parameters'){
+            stage('porm'){
                 when{
                     expression {
                         params.Env == 'dev'
@@ -85,6 +85,7 @@ pipeline {
                         echo "Environment: ${params.Env}"
                         echo "AMIL: ${parms.AMI_List}"
                         echo "demo: ${parms.Image_Information}"
+                    }
                 }
             }
             stage('demo'){
