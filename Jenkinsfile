@@ -51,18 +51,23 @@ properties([
                     ] 
             ]
         ],
-        [
+        [$class: 'DynamicReferenceParameter', 
+            choiceType: 'ET_FORMATTED_HTML', 
+            description: 'Select the  AMI based on the following infomration', 
+            name: 'Image_Information', 
+            referencedParameters: 'AMI_List', 
+            script: 
+                [$class: 'GroovyScript', 
+                script: 'return["Could not get AMi Information"]', 
                 script: [
                     script: '''
-                            if (Env.equals("dev")){
-                                if(AMI_List.contains("ami-sd2345sd")){
-                                    return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
-                                }
+                            if(AMI_List.contains("ami-sd2345sd")){
+                                return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
                             }
                             '''
                         ]
                 ]
-        //]
+        ]
     ])
 ])
 
