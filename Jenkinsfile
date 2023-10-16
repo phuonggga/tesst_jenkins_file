@@ -64,6 +64,9 @@ properties([
                             if(AMI_List.contains("ami-sd2345sd")){
                                 return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
                             }
+                            if(AMI_List.contains("ami-sdf34sdf")){
+                                return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
+                            }
                             '''
                         ]
                 ]
@@ -83,8 +86,8 @@ pipeline {
                 steps {
                     script {
                         echo "Environment: ${params.Env}"
-                        echo "AMIL: ${parms.AMI_List}"
-                        echo "demo: ${parms.Image_Information}"
+                        echo "AMIL: ${params.AMI_List}"
+                        echo "demo: ${params.Image_Information}"
                     }
                 }
             }
