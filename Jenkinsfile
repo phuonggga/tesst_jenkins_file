@@ -1,108 +1,63 @@
-properties([
-    parameters([
-        [$class: 'ChoiceParameter', 
-            choiceType: 'PT_SINGLE_SELECT', 
-            description: 'Select the Environemnt from the Dropdown List', 
-            filterLength: 1, 
-            filterable: false, 
-            name: 'Env', 
-            script: [
-                $class: 'GroovyScript', 
-                fallbackScript: [
-                    classpath: [], 
-                    sandbox: false, 
-                    script: 
-                        "return['Could not get The environemnts']"
-                ], 
-                script: [
-                    classpath: [], 
-                    sandbox: false, 
-                    script: 
-                        "return['dev','stage','prod']"
-                ]
-            ]
-        ],
-        [$class: 'CascadeChoiceParameter', 
-            choiceType: 'PT_SINGLE_SELECT', 
-            description: 'Select the AMI from the Dropdown List',
-            name: 'AMI_List', 
-            referencedParameters: 'Env', 
-            script: 
-                [$class: 'GroovyScript', 
-                fallbackScript: [
-                        classpath: [], 
-                        sandbox: false, 
-                        script: "return['Could not get Environment from Env Param']"
-                        ], 
-                script: [
-                        classpath: [], 
-                        sandbox: false, 
-                        script: '''
-                        if (Env.equals("dev")){
-                            return["ami-sd2345sd", "ami-asdf245sdf", "ami-asdf3245sd"]
-                        }
-                        else if(Env.equals("stage")){
-                            return["ami-sd34sdf", "ami-sdf345sdc", "ami-sdf34sdf"]
-                        }
-                        else if(Env.equals("prod")){
-                            return["ami-sdf34sdf", "ami-sdf34ds", "ami-sdf3sf3"]
-                        }
-                        '''
-                    ] 
-            ]
-        ],
-        [$class: 'DynamicReferenceParameter', 
-            choiceType: 'ET_FORMATTED_HTML', 
-            description: 'Select the  AMI based on the following infomration', 
-            name: 'Image_Information', 
-            referencedParameters: 'AMI_List', 
-            script: 
-                [$class: 'GroovyScript', 
-                script: 'return["Could not get AMi Information"]', 
-                script: [
-                    script: '''
-                            if(AMI_List.contains("ami-sd2345sd")){
-                                return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
-                            }
-                            if(AMI_List.contains("ami-sdf34sdf")){
-                                inputBox="<input type ='text' id = 'myText' name='value' >"
-                                return inputBox
-                            }
-                            '''
-                        ]
-                ]
-        ]
-    ])
-])
-
 pipeline {
     agent any
-        stages {
-            stage('porm'){
-                when{
-                    expression {
-                        params.Env == 'dev'
-                    }
-                }
-                steps {
-                    script {
-                        echo "Environment: ${params.Env}"
-                        echo "AMIL: ${params.AMI_List}"
-                        echo "demo: ${params.Image_Information}"
-                    }
-                }
-            }
-            stage('demo'){
-                when{
-                    expression {
-                        params.Env == 'prod'
-                    }
-                }
-                steps {
-                    script {
-                        echo "dadasdasd"
-                    }
-                }
+    parameters {
+        choice(
+            name: 'CHOICE_LIST_1',
+            choices: ['a', 'b', 'c'],
+            description: 'Make a choice'
+        )
+        activeChoiceReactiveParam(
+            name: 'PARAM_2',
+            description: 'Enter param 2',
+            script: [
+                $class: 'GroovyScript',
+                fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script: "return ['']"
+                ],
+                script: [
+                    classpath: [],
+                    sandbox: false,
+                    script: '''
+                        if (params.CHOICE_LIST_1 == 'b') {
+                            return ['']
+                        } else {
+                            return ['param 2']
+                        }
+                    '''
+                ]
+            ]
+        )
+        activeChoiceReactiveParam(
+            name: 'PARAM_3',
+            description: 'Enter param 3',
+            script: [
+                $class: 'GroovyScript',
+                fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script: "return ['']"
+                ],
+                script: [
+                    classpath: [],
+                    sandbox: false,
+                    script: '''
+                        if (params.PARAM_2 == 'param 2') {
+                            return ['param 3']
+                        } else {
+                            return ['']
+                        }
+                    '''
+                ]
+            ]
+        )
+    }
+    stages {
+        stage('Example') {
+            steps {
+                echo "You chose ${params.CHOICE_LIST_1}, ${params.PARAM_2}, ${params.PARAM_3}"
             }
         }
-}   
+    }
+}
