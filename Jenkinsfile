@@ -55,8 +55,8 @@ properties([
                 script: [
                     script: '''
                             if (Env.equals("dev")){
-                                if(AMI_List.equals("ami-sd2345sd")){
-                                    string(name: 'GG', description: 'trsd', trim: true)
+                                if(AMI_List.contains("ami-sd2345sd")){
+                                    return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
                                 }
                             }
                             '''
