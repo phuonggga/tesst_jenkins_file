@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
     parameters {
@@ -6,11 +7,10 @@ pipeline {
             choices: ['a', 'b', 'c'],
             description: 'Make a choice'
         )
-        cascadeChoiceParam(
+        activeChoiceParam(
             name: 'PARAM_2',
             description: 'Enter param 2',
             choiceType: 'PT_SINGLE_SELECT',
-            referencedParameters: 'CHOICE_LIST_1',
             script: [
                 $class: 'GroovyScript',
                 fallbackScript: [
@@ -22,7 +22,7 @@ pipeline {
                     classpath: [],
                     sandbox: false,
                     script: '''
-                        if (CHOICE_LIST_1 == 'b') {
+                        if (params.CHOICE_LIST_1 == 'b') {
                             return ['']
                         } else {
                             return ['param 2']
@@ -31,11 +31,10 @@ pipeline {
                 ]
             ]
         )
-        cascadeChoiceParam(
+        activeChoiceParam(
             name: 'PARAM_3',
             description: 'Enter param 3',
             choiceType: 'PT_SINGLE_SELECT',
-            referencedParameters: 'PARAM_2',
             script: [
                 $class: 'GroovyScript',
                 fallbackScript: [
@@ -47,7 +46,7 @@ pipeline {
                     classpath: [],
                     sandbox: false,
                     script: '''
-                        if (PARAM_2 == 'param 2') {
+                        if (params.PARAM_2 == 'param 2') {
                             return ['param 3']
                         } else {
                             return ['']
