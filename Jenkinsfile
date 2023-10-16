@@ -6,9 +6,11 @@ pipeline {
             choices: ['a', 'b', 'c'],
             description: 'Make a choice'
         )
-        activeChoiceReactiveParam(
+        cascadeChoiceParam(
             name: 'PARAM_2',
             description: 'Enter param 2',
+            choiceType: 'PT_SINGLE_SELECT',
+            referencedParameters: 'CHOICE_LIST_1',
             script: [
                 $class: 'GroovyScript',
                 fallbackScript: [
@@ -20,7 +22,7 @@ pipeline {
                     classpath: [],
                     sandbox: false,
                     script: '''
-                        if (params.CHOICE_LIST_1 == 'b') {
+                        if (CHOICE_LIST_1 == 'b') {
                             return ['']
                         } else {
                             return ['param 2']
@@ -29,9 +31,11 @@ pipeline {
                 ]
             ]
         )
-        activeChoiceReactiveParam(
+        cascadeChoiceParam(
             name: 'PARAM_3',
             description: 'Enter param 3',
+            choiceType: 'PT_SINGLE_SELECT',
+            referencedParameters: 'PARAM_2',
             script: [
                 $class: 'GroovyScript',
                 fallbackScript: [
@@ -43,7 +47,7 @@ pipeline {
                     classpath: [],
                     sandbox: false,
                     script: '''
-                        if (params.PARAM_2 == 'param 2') {
+                        if (PARAM_2 == 'param 2') {
                             return ['param 3']
                         } else {
                             return ['']
