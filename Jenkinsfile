@@ -65,7 +65,8 @@ properties([
                                 return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
                             }
                             if(AMI_List.contains("ami-sdf34sdf")){
-                                return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
+                                inputBox="<input type ='text' id = 'myText' name='value' >"
+                                return inputBox
                             }
                             '''
                         ]
