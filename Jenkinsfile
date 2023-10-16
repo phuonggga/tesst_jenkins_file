@@ -81,6 +81,11 @@ pipeline {
     agent any
         stages {
             stage('Parameters'){
+                when{
+                    expression {
+                        params.Env == 'prod'
+                    }
+                }
                 steps {
                     script {
                         echo "Environment: ${params.Env}"
