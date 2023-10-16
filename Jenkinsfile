@@ -61,8 +61,10 @@ properties([
                 script: 'return["Could not get AMi Information"]', 
                 script: [
                     script: '''
-                            if(AMI_List.contains("ami-sd2345sd")){
-                                return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
+                            if (Env.equals("dev")){
+                                if(AMI_List.contains("ami-sd2345sd")){
+                                    return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
+                                }
                             }
                             '''
                         ]
@@ -77,7 +79,7 @@ pipeline {
             stage('Parameters'){
                 when{
                     expression {
-                        params.Env == 'prod'
+                        params.Env == 'dev'
                     }
                 }
                 steps {
