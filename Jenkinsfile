@@ -69,5 +69,9 @@
                     }
                 }
             }
+            stage("check"){
+                echo "${params.application_servers}"
+                echo "${params.demo}"
+            }
         }
     }
