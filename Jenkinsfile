@@ -34,6 +34,7 @@
                                             ] 
                                     ]
                                 ],
+                                [$class: 'StringParameterValue', name: 'BINPATH', value: 'BINPATH'],
                                 [$class: 'DynamicReferenceParameter', 
                                     choiceType: 'ET_FORMATTED_HTML', 
                                     description: 'enter job params',
