@@ -1,47 +1,68 @@
-def approvalMap 
-pipeline {
-    agent none
-
-    stages {
-        stage('Stage 1') {
-            agent none
-            steps {
-             
-                timeout(60) {                // timeout waiting for input after 60 minutes
+ pipeline {
+    agent any
+        stages {
+            stage('Parameters'){
+                steps {
                     script {
-                        // capture the approval details in approvalMap. 
-                         approvalMap = input 
-                                        id: 'test', 
-                                        message: 'Hello', 
-                                        ok: 'Proceed?', 
-                                        parameters: [
-                                            choice(
-                                                choices: 'apple\npear\norange', 
-                                                description: 'Select a fruit for this build', 
-                                                name: 'FRUIT'
-                                            ), 
-                                            string(
-                                                defaultValue: '', 
-                                                description: '', 
-                                                name: 'myparam'
-                                            )
-                                        ], 
-                                        submitter: 'user1,user2,group1', 
-                                        submitterParameter: 'APPROVER'
-                                            
+                    properties([
+                            parameters([
+                            text(
+                                defaultValue: '''''', 
+                                name: 'application_servers',
+                                description: 'Please provide semicolon delimited (;) application server list ', 
+                            ),
+                                [$class: 'CascadeChoiceParameter', 
+                                    choiceType: 'PT_CHECKBOX', 
+                                    description: 'Select Services',
+                                    name: 'application_services_list', 
+                                    referencedParameters: 'application_servers', 
+                                    script: 
+                                        [$class: 'GroovyScript', 
+                                        fallbackScript: [
+                                                classpath: [], 
+                                                sandbox: false, 
+                                                script: "return['']"
+                                                ], 
+                                        script: [
+                                                classpath: [], 
+                                                sandbox: false, 
+                                                script: '''
+                                                if (application_servers.length() > 0){
+                                                    return["heartbeat_consumer", "surgeon_cloud_login", "system_configuration"]
+                                                }
+                                                '''
+                                            ] 
+                                    ]
+                                ],
+                                [$class: 'DynamicReferenceParameter', 
+                                    choiceType: 'ET_FORMATTED_HTML', 
+                                    description: 'enter job params',
+                                    name: 'hb_job_params', 
+                                    referencedParameters: 'application_services_list', 
+                                    script: 
+                                        [$class: 'GroovyScript', 
+                                        fallbackScript: [
+                                                classpath: [], 
+                                                sandbox: false, 
+                                                script: "return['']"
+                                                ], 
+                                        script: [
+                                                classpath: [], 
+                                                sandbox: false, 
+                                                script: '''
+                                                if (application_services_list.contains('heartbeat_consumer')){
+                                                    return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
+
+                                                }
+                                                '''
+                                            ] 
+                                    ],
+                                omitValueField: true
+                                ],
+                            ])
+                        ])
                     }
                 }
             }
         }
-        stage('Stage 2') {
-            agent any
-
-            steps {
-                // print the details gathered from the approval
-                echo "This build was approved by: ${approvalMap['APPROVER']}"
-                echo "This build is brought to you today by the fruit: ${approvalMap['FRUIT']}"
-                echo "This is myparam: ${approvalMap['myparam']}"
-            }
-        }
     }
-}
