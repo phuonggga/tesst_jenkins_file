@@ -1,65 +1,46 @@
-
+def approvalMap 
 pipeline {
-    agent any
-    parameters {
-        choice(
-            name: 'CHOICE_LIST_1',
-            choices: ['a', 'b', 'c'],
-            description: 'Make a choice'
-        )
-        activeChoiceParam(
-            name: 'PARAM_2',
-            description: 'Enter param 2',
-            choiceType: 'PT_SINGLE_SELECT',
-            script: [
-                $class: 'GroovyScript',
-                fallbackScript: [
-                    classpath: [],
-                    sandbox: false,
-                    script: "return ['']"
-                ],
-                script: [
-                    classpath: [],
-                    sandbox: false,
-                    script: '''
-                        if (params.CHOICE_LIST_1 == 'b') {
-                            return ['']
-                        } else {
-                            return ['param 2']
-                        }
-                    '''
-                ]
-            ]
-        )
-        activeChoiceParam(
-            name: 'PARAM_3',
-            description: 'Enter param 3',
-            choiceType: 'PT_SINGLE_SELECT',
-            script: [
-                $class: 'GroovyScript',
-                fallbackScript: [
-                    classpath: [],
-                    sandbox: false,
-                    script: "return ['']"
-                ],
-                script: [
-                    classpath: [],
-                    sandbox: false,
-                    script: '''
-                        if (params.PARAM_2 == 'param 2') {
-                            return ['param 3']
-                        } else {
-                            return ['']
-                        }
-                    '''
-                ]
-            ]
-        )
-    }
+    agent none
+
     stages {
-        stage('Example') {
+        stage('Stage 1') {
+            agent none
             steps {
-                echo "You chose ${params.CHOICE_LIST_1}, ${params.PARAM_2}, ${params.PARAM_3}"
+             
+                timeout(60) {                // timeout waiting for input after 60 minutes
+                    script {
+                        // capture the approval details in approvalMap. 
+                         approvalMap = input 
+                                        id: 'test', 
+                                        message: 'Hello', 
+                                        ok: 'Proceed?', 
+                                        parameters: [
+                                            choice(
+                                                choices: 'apple\npear\norange', 
+                                                description: 'Select a fruit for this build', 
+                                                name: 'FRUIT'
+                                            ), 
+                                            string(
+                                                defaultValue: '', 
+                                                description: '', 
+                                                name: 'myparam'
+                                            )
+                                        ], 
+                                        submitter: 'user1,user2,group1', 
+                                        submitterParameter: 'APPROVER'
+                                            
+                    }
+                }
+            }
+        }
+        stage('Stage 2') {
+            agent any
+
+            steps {
+                // print the details gathered from the approval
+                echo "This build was approved by: ${approvalMap['APPROVER']}"
+                echo "This build is brought to you today by the fruit: ${approvalMap['FRUIT']}"
+                echo "This is myparam: ${approvalMap['myparam']}"
             }
         }
     }
