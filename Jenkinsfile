@@ -70,8 +70,11 @@
                 }
             }
             stage("check"){
-                echo "${params.application_servers}"
-                echo "${params.demo}"
+                steps{
+                    echo "${params.application_servers}"
+                    echo "${params.demo}"
+                }
+                
             }
         }
     }
