@@ -11,6 +11,11 @@
                                 name: 'application_servers',
                                 description: 'Please provide semicolon delimited (;) application server list ', 
                             ),
+                            text(
+                                defaultValue: '''''', 
+                                name: 'demo',
+                                description: 'Please provide semicolon delimited (;) application server list ', 
+                            ),
                                 [$class: 'CascadeChoiceParameter', 
                                     choiceType: 'PT_CHECKBOX', 
                                     description: 'Select Services',
@@ -34,7 +39,6 @@
                                             ] 
                                     ]
                                 ],
-                                [$class: 'StringParameterValue', name: 'BINPATH', value: 'BINPATH'],
                                 [$class: 'DynamicReferenceParameter', 
                                     choiceType: 'ET_FORMATTED_HTML', 
                                     description: 'enter job params',
