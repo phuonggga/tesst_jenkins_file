@@ -1,8 +1,8 @@
+ def dem = ''
  pipeline {
     agent any
         stages {
             stage('Parameters'){
-                def dem = ''
                 steps {
                     script {
                     properties([
