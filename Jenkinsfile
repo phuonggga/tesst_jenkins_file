@@ -2,6 +2,7 @@
     agent any
         stages {
             stage('Parameters'){
+                def dem = ''
                 steps {
                     script {
                     properties([
@@ -56,7 +57,7 @@
                                                 sandbox: false, 
                                                 script: '''
                                                 if (application_services_list.contains('heartbeat_consumer')){
-                                                    return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \"></textarea>"""
+                                                    return """<textarea name=\"value\" rows=\"5\" class=\"setting-input   \">${dem}</textarea>"""
 
                                                 }
                                                 '''
@@ -71,8 +72,8 @@
             }
             stage("check"){
                 steps{
-                    echo "${params.application_servers}"
-                    echo "${params.demo}"
+                    echo "${params.hb_job_params}"
+                    echo "${dem}"
                 }
                 
             }
