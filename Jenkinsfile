@@ -57,7 +57,7 @@
                                                 sandbox: false, 
                                                 script: '''
                                                 if (application_services_list.contains('heartbeat_consumer')){
-                                                    return """<textarea name=\"CHECK\" rows=\"5\" class=\"setting-input   \">${dem}</textarea>"""
+                                                    return """<textarea name=\"hb_job_params\" rows=\"5\" class=\"setting-input   \"></textarea>"""
 
                                                 }
                                                 '''
